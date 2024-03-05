@@ -6,6 +6,10 @@ import { ErrorPage } from "./pages/error/Error";
 import LandingPage from "./pages/landing/LandingPage";
 import LoginPage from "./pages/login/LoginPage";
 import RegistrationPage from "./pages/registration/RegistrationPage";
+import AuthenticatedLayout from "./layouts/AuthenticatedLayout";
+import DashboardPage from "./pages/dashboard/Dashboard";
+import SupportPage from "./pages/support/SupportPage";
+import UsersPage from "./pages/users/UsersPage";
 
 const IndexRoutes: FC = () => (
 	<BrowserRouter>
@@ -18,6 +22,15 @@ const IndexRoutes: FC = () => (
 					element={<RegistrationPage />}
 				/>
 				<Route path="*" element={<ErrorPage />} />
+			</Route>
+
+			<Route element={<AuthenticatedLayout />}>
+				<Route path={INTERNAL_ROUTES.DASHBOARD} element={<DashboardPage />} />
+				<Route
+					path={INTERNAL_ROUTES.GLOBAL_USERS_PAGE}
+					element={<UsersPage />}
+				/>
+				<Route path={INTERNAL_ROUTES.SUPPORT_PAGE} element={<SupportPage />} />
 			</Route>
 		</Routes>
 	</BrowserRouter>

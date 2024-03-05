@@ -6,7 +6,7 @@ import {
 	GiftIcon,
 	HandThumbUpIcon,
 } from "@heroicons/react/24/outline";
-import { Container } from "./common/Container";
+import { Container } from "../common/Container";
 
 const plans = [
 	{

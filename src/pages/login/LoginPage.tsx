@@ -6,37 +6,69 @@ const LoginPage: FC = () => {
 	const navigate = useNavigate();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-	const [response, setResponse] = useState("");
 	const [error, setError] = useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
 	const loginFlow = async () => {
-		await fetch(BACKEND_ROUTES.LOGIN_URL, {
+		let responseBody: any;
+		// Validation Checks
+		if (!email || !password) {
+			setErrorMessage("Please do not leave any fields empty.");
+			setError(true);
+			return;
+		}
+
+		const body = JSON.stringify({
+			email,
+			password,
+		});
+		const response = await fetch(BACKEND_ROUTES.LOGIN_URL, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({
-				email,
-				password,
-			}),
-		})
-			.then(() => {})
-			.then(() => {});
-	};
-	const resetFields = () => {
-		setEmail("");
-		setPassword("");
-		setResponse("");
-	};
+			body,
+		});
 
-	useEffect(() => {}, []);
+		// Check response status and update ui accordingly
+		if (!response.ok) {
+			// If error parse the json error response
+			responseBody = await response.json();
+			console.log(responseBody);
+			setErrorMessage(responseBody.message);
+			setError(true);
+			return;
+		}
+		// Else will be token of type string
+		responseBody = await response.text();
+		const localStorageToken = JSON.stringify({
+			authenticated: true,
+			token: responseBody,
+		});
+		localStorage.setItem("pfg-auth", localStorageToken);
+		navigate(INTERNAL_ROUTES.DASHBOARD, { state: { token: responseBody } });
+	};
 
 	useEffect(() => {
-		if (response) {
-			setTimeout(() => {
-				resetFields();
-			}, 4000);
+		const localStorageAuth = localStorage.getItem("pfg-auth");
+		if (localStorageAuth) {
+			const authenticationObject = JSON.parse(localStorageAuth);
+			if (authenticationObject.authenticated) {
+				navigate(INTERNAL_ROUTES.DASHBOARD, {
+					state: { token: authenticationObject.token },
+				});
+			}
 		}
-	}, [response]);
+	}, []);
+
+	// Hook to timeout the error
+	useEffect(() => {
+		if (error) {
+			setTimeout(() => {
+				setError(false);
+				setErrorMessage(null);
+			}, 8000);
+		}
+		return () => {};
+	}, [error]);
 
 	return (
 		<>
@@ -51,7 +83,6 @@ const LoginPage: FC = () => {
 						Sign in to your account
 					</h2>
 				</div>
-				{response ? <div>{JSON.stringify(response, null, 2)}</div> : <div />}
 
 				<div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
 					<div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
@@ -65,7 +96,7 @@ const LoginPage: FC = () => {
 										value={email}
 										onChange={(e) => setEmail(e.target.value)}
 										type="email"
-										autoComplete="text"
+										autoComplete="email"
 										required
 										className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
 									/>
@@ -90,7 +121,7 @@ const LoginPage: FC = () => {
 
 							{error ? (
 								<div>
-									<p className="text-red-700">{errorMessage}</p>
+									<p className="text-red-700 text-center">{errorMessage}</p>
 								</div>
 							) : (
 								<div />

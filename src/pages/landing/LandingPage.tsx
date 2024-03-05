@@ -1,9 +1,8 @@
 import { FC } from "react";
-import Hero from "../../components/Hero";
-import PrimaryFeatures from "../../components/PrimaryFeatures";
-import Support from "../../components/Support";
-import Contact from "../../components/Contact";
-import { ProductPageFooter } from "../../components/common/Footer";
+import Hero from "../../components/landing/Hero";
+import PrimaryFeatures from "../../components/landing/PrimaryFeatures";
+import Support from "../../components/landing/Support";
+import Contact from "../../components/landing/Contact";
 
 const LandingPage: FC = () => (
 	<>
@@ -13,7 +12,6 @@ const LandingPage: FC = () => (
 			<Support />
 			<Contact />
 		</main>
-		<ProductPageFooter />
 	</>
 );
 

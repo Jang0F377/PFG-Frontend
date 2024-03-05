@@ -2,8 +2,8 @@ import { TypeAnimation } from "react-type-animation";
 import { AtSymbolIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import clsx from "clsx";
-import MyDivider from "./common/MyDivider";
-import CustomAvatar from "./common/Avatar";
+import MyDivider from "../common/MyDivider";
+import CustomAvatar from "../common/Avatar";
 
 export const ConfirmOrDeclineButtons = () => {
 	const confirm = "Confirm";

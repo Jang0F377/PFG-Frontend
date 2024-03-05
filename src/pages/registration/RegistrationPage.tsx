@@ -1,55 +1,59 @@
 import { FC, useEffect, useState } from "react";
 import { BACKEND_ROUTES, INTERNAL_ROUTES } from "../../constants/routes";
+import { useNavigate } from "react-router-dom";
 
 const RegistrationPage: FC = () => {
+	const navigate = useNavigate();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
-	const [response, setResponse] = useState("");
-	const [passwordsDontMatchError, setPasswordsDontMatchError] = useState<
-		boolean | undefined
-	>(undefined);
+	const [error, setError] = useState<boolean>(false);
+	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-	const loginFlow = async () => {
+	const registrationFlow = async () => {
+		// Validation Checks
+		if (!email || !password || !confirmPassword) {
+			setErrorMessage("Please do not leave any fields empty.");
+			setError(true);
+			return;
+		}
 		if (password !== confirmPassword) {
-			setPasswordsDontMatchError(true);
+			setErrorMessage("Your passwords do not match. Please try again.");
+			setError(true);
 			return;
 		}
 
-		await fetch(BACKEND_ROUTES.REGISTER_URL, {
+		const body = JSON.stringify({
+			email,
+			password,
+		});
+		const response = await fetch(BACKEND_ROUTES.REGISTER_URL, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({
-				email,
-				password,
-			}),
-		})
-			.then(() => {})
-			.then(() => {});
-	};
-	const resetFields = () => {
-		setEmail("");
-		setPassword("");
-		setResponse("");
+			body,
+		});
+		const responseBody = await response.json();
+
+		// Check response status and update ui accordingly
+		if (!response.ok) {
+			setErrorMessage(responseBody.message);
+			setError(true);
+			return;
+		}
+
+		navigate(INTERNAL_ROUTES.DASHBOARD);
 	};
 
 	// Hook to timeout the error
 	useEffect(() => {
-		if (passwordsDontMatchError) {
+		if (error) {
 			setTimeout(() => {
-				setPasswordsDontMatchError(false);
-			}, 5000);
+				setError(false);
+				setErrorMessage(null);
+			}, 8000);
 		}
 		return () => {};
-	}, [passwordsDontMatchError]);
-
-	useEffect(() => {
-		if (response) {
-			setTimeout(() => {
-				resetFields();
-			}, 4000);
-		}
-	}, [response]);
+	}, [error]);
 
 	return (
 		<>
@@ -64,8 +68,6 @@ const RegistrationPage: FC = () => {
 						Create your account
 					</h2>
 				</div>
-				{response ? <div>{JSON.stringify(response, null, 2)}</div> : <div />}
-
 				<div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
 					<div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
 						<form className="space-y-6" action="#" method="POST">
@@ -116,19 +118,17 @@ const RegistrationPage: FC = () => {
 									/>
 								</div>
 							</div>
-
-							{passwordsDontMatchError ? (
+							{error ? (
 								<div>
-									<p className="text-red-700">Passwords do not match</p>
+									<p className="text-red-700 text-center">{errorMessage}</p>
 								</div>
 							) : (
 								<div />
 							)}
-
 							<div>
 								<button
 									type="button"
-									onClick={loginFlow}
+									onClick={registrationFlow}
 									className="flex w-full justify-center rounded-md border border-transparent bg-neon-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-neon-blue-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
 								>
 									Sign in

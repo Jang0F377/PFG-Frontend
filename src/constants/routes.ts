@@ -10,6 +10,8 @@ export const INTERNAL_ROUTES = {
 };
 
 export const BACKEND_ROUTES = {
-	LOGIN_URL: "http://localhost:3000/login",
-	REGISTER_URL: "http://localhost:3000/register",
+	LOGIN_URL: "http://localhost:3000/users/login",
+	REGISTER_URL: "http://localhost:3000/users/register",
+	GET_ALL_USERS_URL: "http://localhost:3000/users/all",
+	GET_ME_URL: "http://localhost:3000/users/me",
 };
