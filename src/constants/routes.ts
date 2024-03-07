@@ -14,4 +14,6 @@ export const BACKEND_ROUTES = {
 	REGISTER_URL: "http://localhost:3000/users/register",
 	GET_ALL_USERS_URL: "http://localhost:3000/users/all",
 	GET_ME_URL: "http://localhost:3000/users/me",
+	VALIDATE_RECIPIENTS: "http://localhost:3000/users/validate-recipient",
+	CREATE_SESH_URL: "http://localhost:3000/sesh/create",
 };

@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { User } from "../../types/user";
-import CustomAvatar from "../common/Avatar";
 import { SeshSendInviteModal } from "../common/Modals";
 import MyDivider from "../common/MyDivider";
 
 interface UserListProps {
 	user: User;
+	authToken?: string;
+	userEmail?: string;
 }
 
-const UserList = ({ user }: UserListProps) => {
+const UserList = ({ user, authToken, userEmail }: UserListProps) => {
 	const [showModal, setShowModal] = useState(false);
 
 	const handleShowModal = () => {
@@ -69,6 +70,8 @@ const UserList = ({ user }: UserListProps) => {
 				open={showModal}
 				handleClose={handleCloseModal}
 				specificRecipient={user?.email}
+				authToken={authToken}
+				userEmail={userEmail}
 			/>
 		</div>
 	);

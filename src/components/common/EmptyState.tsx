@@ -4,8 +4,14 @@ import {
 } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { SeshSendInviteModal } from "./Modals";
+import { User } from "../../types/user";
 
-export function EmptyState() {
+interface EmptyStateProps {
+	userEmail?: string;
+	authToken: string;
+}
+
+export function EmptyState({ userEmail, authToken }: EmptyStateProps) {
 	const [showModal, setShowModal] = useState(false);
 
 	const handleShowModal = () => {
@@ -38,6 +44,8 @@ export function EmptyState() {
 				</div>
 			</div>
 			<SeshSendInviteModal
+				userEmail={userEmail}
+				authToken={authToken}
 				open={showModal}
 				handleClose={handleCloseModal}
 				specificRecipient={undefined}

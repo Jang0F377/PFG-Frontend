@@ -5,21 +5,33 @@ import {
 } from "../../components/common/EmptyState";
 import { GeneralNotification } from "../../components/common/Notifications";
 import { User } from "../../types/user";
-import { useLocation } from "react-router-dom";
-import { BACKEND_ROUTES } from "../../constants/routes";
+import { BACKEND_ROUTES, INTERNAL_ROUTES } from "../../constants/routes";
 import LoadingPage from "../loading/LoadingPage";
 import { ErrorPage } from "../error/Error";
+import { useNavigate } from "react-router-dom";
+import Friends from "../../components/dashboard/Friends";
 
 const DashboardPage: FC = () => {
-	const location = useLocation();
-	const { token } = location.state;
+	const navigate = useNavigate();
+	const authObject = sessionStorage.getItem("pfg-auth");
+	const token = authObject ? JSON.parse(authObject).token : undefined;
 	const [me, setMe] = useState<User | undefined>(undefined);
 	const [isLoading, setIsLoading] = useState(true);
 	const [success, setSuccess] = useState(false);
 	const [error, setError] = useState(false);
+	const [errorMessage, setErrorMessage] = useState<string | undefined>(
+		undefined
+	);
+	const [errorStatusCode, setErrorStatusCode] = useState<number | undefined>(
+		undefined
+	);
 	const [showNotification, setShowNotification] = useState(false);
-	const [incomingSeshInvites, setIncomingSeshInvites] = useState([]);
-	const [upcomingSeshes, setUpcomingSeshes] = useState([]);
+	const [incomingSeshInvites, setIncomingSeshInvites] = useState(
+		me?.upcomingAcceptedSeshes
+	);
+	const [upcomingSeshes, setUpcomingSeshes] = useState(
+		me?.upcomingUndecidedSeshes
+	);
 
 	const fetchMe = async () => {
 		const response = await fetch(BACKEND_ROUTES.GET_ME_URL, {
@@ -27,12 +39,20 @@ const DashboardPage: FC = () => {
 			headers: { "Content-Type": "application/json", token: token },
 		});
 
+		const responseBody = await response.json();
+
 		if (!response.ok) {
+			if (response.status === 404) {
+				sessionStorage.clear();
+				setIsLoading(false);
+				navigate(INTERNAL_ROUTES.LOGIN_PAGE);
+			}
+			setErrorStatusCode(responseBody?.statusCode);
+			setErrorMessage(responseBody?.message);
 			setIsLoading(false);
 			setError(true);
 		}
 
-		const responseBody = await response.json();
 		console.log(responseBody);
 		setMe(responseBody);
 		setIsLoading(false);
@@ -54,7 +74,6 @@ const DashboardPage: FC = () => {
 		setError(false);
 	};
 
-	const fetchIncomingInvites = async () => {};
 	useEffect(() => {
 		fetchMe();
 	}, []);
@@ -64,7 +83,7 @@ const DashboardPage: FC = () => {
 	}
 
 	if (error) {
-		return <ErrorPage />;
+		return <ErrorPage message={errorMessage} code={errorStatusCode} />;
 	}
 
 	return (
@@ -83,7 +102,6 @@ const DashboardPage: FC = () => {
 
 					<main className="-mt-32 space-y-3 bg-neon-blue-50 pt-3 ">
 						<section className="mx-1.5 px-4 pb-3 sm:px-6 md:mx-auto  md:max-w-2xl md:pb-6 lg:max-w-4xl lg:px-4 lg:px-8 xl:max-w-7xl xl:pb-8">
-							{/* Replace with your content */}
 							<div className="mx-auto  items-center justify-center rounded-lg bg-neon-blue-200 px-5 py-6 text-center  sm:px-6">
 								<h1 className="-mt-5  text-left text-xl font-medium">
 									Upcoming Seshes
@@ -99,15 +117,13 @@ const DashboardPage: FC = () => {
 											<></>
 										))
 									) : (
-										<EmptyState />
+										<EmptyState userEmail={me?.email} authToken={token} />
 									)}
 								</div>
 							</div>
-							{/* /End replace */}
 						</section>
 
 						<section className="mx-1.5 items-center justify-center rounded-lg bg-neon-blue-200 px-2 pb-6 sm:px-3 md:mx-auto md:max-w-2xl lg:max-w-4xl lg:px-4  xl:max-w-7xl">
-							{/* Replace with your content */}
 							<div className="mx-auto  items-center justify-center rounded-lg  px-5 py-3 text-center  sm:px-6">
 								<h1 className="-mt-2  text-left text-xl font-medium">
 									Pending Sesh invites
@@ -127,10 +143,9 @@ const DashboardPage: FC = () => {
 									)}
 								</div>
 							</div>
-							{/* /End replace */}
 						</section>
 						<section className="mx-1.5 rounded-lg bg-neon-blue-50 px-2 pb-6 sm:px-3 md:mx-auto md:max-w-2xl lg:max-w-4xl lg:px-4  xl:max-w-7xl">
-							{/* <Friends /> */}
+							<Friends />
 						</section>
 					</main>
 					{/*Notification insert here!!*/}

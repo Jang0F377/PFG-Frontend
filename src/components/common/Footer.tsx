@@ -32,7 +32,7 @@ export const ProductPageFooter = () => {
 
 export const DashboardPageFooter = () => {
 	return (
-		<footer className="bg-neon-blue-600">
+		<footer className="bg-neon-blue-600 ">
 			<Container className="">
 				<div className="rounded-xl  py-16">
 					<img

@@ -2,9 +2,10 @@ import { FC } from "react";
 import { Link } from "react-router-dom";
 
 interface ErrorPageProps {
-	code?: string;
+	code?: number;
 	message?: string;
 	extraMessage?: string;
+	linkTo?: string;
 }
 
 const DEFAULT_ERROR = {
@@ -17,6 +18,7 @@ export const ErrorPage: FC<ErrorPageProps> = ({
 	code = DEFAULT_ERROR.code,
 	message = DEFAULT_ERROR.message,
 	extraMessage = DEFAULT_ERROR.extraMessage,
+	linkTo,
 }) => (
 	<div className="flex h-full w-full flex-col bg-blue-100">
 		<div className="flex flex-grow flex-col bg-blue-100 lg:mt-20 lg:pt-6">
@@ -28,7 +30,7 @@ export const ErrorPage: FC<ErrorPageProps> = ({
 						</h1>
 						<p className="mt-2 text-base text-blue-800">{message}</p>
 						<p className="text-base text-blue-800">{extraMessage}</p>
-						<Link className="hover:underline" to={"/"}>
+						<Link className="hover:underline" to={linkTo ? linkTo : "/"}>
 							Go back home
 						</Link>
 					</div>

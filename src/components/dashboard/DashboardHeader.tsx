@@ -4,6 +4,7 @@ import clsx from "clsx";
 import { Link } from "react-router-dom";
 import { Fragment } from "react/jsx-runtime";
 import { HeaderDashboardNavLinks } from "../common/NavLinks";
+import { INTERNAL_ROUTES } from "../../constants/routes";
 
 const DashboardHeader = () => {
 	const navigation = [
@@ -24,11 +25,13 @@ const DashboardHeader = () => {
 								<div className="flex h-16 items-center justify-between px-4 sm:px-0">
 									<div className="flex items-center">
 										<div className="flex-shrink-0">
-											<img
-												src={"/MicrosoftTeams-image-removebg-preview.png"}
-												alt="ERR"
-												className="w-[7.5rem] py-1 lg:w-32 "
-											/>
+											<Link to={INTERNAL_ROUTES.DASHBOARD} aria-label="Home">
+												<img
+													src={"/MicrosoftTeams-image-removebg-preview.png"}
+													alt="ERR"
+													className="w-[7.5rem] py-1 lg:w-32 "
+												/>
+											</Link>
 										</div>
 										<div className="hidden md:mx-auto md:block">
 											<div className="ml-10 flex items-baseline space-x-4">

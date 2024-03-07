@@ -1,13 +1,16 @@
 import { FC, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { BACKEND_ROUTES, INTERNAL_ROUTES } from "../../constants/routes";
 
 const LoginPage: FC = () => {
 	const navigate = useNavigate();
+	const location = useLocation();
+	const justRegistered = location.state?.justRegistered;
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
+	const [authenticated, setAuthenticated] = useState<boolean>(false);
 
 	const loginFlow = async () => {
 		let responseBody: any;
@@ -39,25 +42,14 @@ const LoginPage: FC = () => {
 		}
 		// Else will be token of type string
 		responseBody = await response.text();
-		const localStorageToken = JSON.stringify({
+		const sessionStorageToken = JSON.stringify({
 			authenticated: true,
+			email,
 			token: responseBody,
 		});
-		localStorage.setItem("pfg-auth", localStorageToken);
-		navigate(INTERNAL_ROUTES.DASHBOARD, { state: { token: responseBody } });
+		sessionStorage.setItem("pfg-auth", sessionStorageToken);
+		navigate(INTERNAL_ROUTES.DASHBOARD);
 	};
-
-	useEffect(() => {
-		const localStorageAuth = localStorage.getItem("pfg-auth");
-		if (localStorageAuth) {
-			const authenticationObject = JSON.parse(localStorageAuth);
-			if (authenticationObject.authenticated) {
-				navigate(INTERNAL_ROUTES.DASHBOARD, {
-					state: { token: authenticationObject.token },
-				});
-			}
-		}
-	}, []);
 
 	// Hook to timeout the error
 	useEffect(() => {
@@ -69,6 +61,23 @@ const LoginPage: FC = () => {
 		}
 		return () => {};
 	}, [error]);
+
+	useEffect(() => {
+		const sessionStorageAuth = sessionStorage.getItem("pfg-auth");
+
+		if (sessionStorageAuth) {
+			const authenticationObject = JSON.parse(sessionStorageAuth);
+			if (authenticationObject.authenticated) {
+				setAuthenticated(true);
+			}
+		}
+	}, []);
+
+	useEffect(() => {
+		if (authenticated) {
+			navigate(INTERNAL_ROUTES.DASHBOARD);
+		}
+	}, [authenticated]);
 
 	return (
 		<>
@@ -86,6 +95,18 @@ const LoginPage: FC = () => {
 
 				<div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
 					<div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+						{justRegistered ? (
+							<div>
+								<p className="text-green-700 text-center text-sm">
+									Registration Successful.
+								</p>
+								<p className="text-green-700 text-center text-sm">
+									Please log in.
+								</p>
+							</div>
+						) : (
+							<div />
+						)}
 						<form className="space-y-6" action="#" method="POST">
 							<div>
 								<label className="block text-sm font-medium text-gray-700">

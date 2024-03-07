@@ -41,7 +41,7 @@ const RegistrationPage: FC = () => {
 			return;
 		}
 
-		navigate(INTERNAL_ROUTES.DASHBOARD);
+		navigate(INTERNAL_ROUTES.LOGIN_PAGE, { state: { justRegistered: true } });
 	};
 
 	// Hook to timeout the error

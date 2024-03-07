@@ -7,24 +7,30 @@ import {
 	ChevronRightIcon,
 } from "@heroicons/react/20/solid";
 import clsx from "clsx";
+import { BACKEND_ROUTES } from "../../constants/routes";
 
 interface ModalProps {
 	open: boolean;
 	handleClose: () => void;
 	specificRecipient: string | undefined;
+	authToken?: string;
+	userEmail?: string;
 }
 
 export const SeshSendInviteModal = ({
 	open,
 	handleClose,
 	specificRecipient,
+	authToken,
+	userEmail,
 }: ModalProps) => {
-	const [myId, setMyId] = useState("");
-	const [recipientsEmails, setRecipientsEmails] = useState<Array<string>>();
+	const [recipientsEmails, setRecipientsEmails] = useState<Array<string>>([]);
 	const [recipientsIds, setRecipientsIds] = useState<Array<string>>();
 	const [recipient, setRecipient] = useState(
 		specificRecipient ? specificRecipient : ""
 	);
+	const [error, setError] = useState(false);
+	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 	const [hour, setHour] = useState(8);
 	const [day, setDay] = useState("today");
 	const AM = "AM";
@@ -62,14 +68,81 @@ export const SeshSendInviteModal = ({
 		}
 	};
 
-	const handleAddRecipient = (email: string) => {};
+	// Helper func to handle validation errors when adding recipients
+	const handleValidationErrors = (message: string): void => {
+		setErrorMessage(message);
+		setError(true);
+	};
+
+	// Makes an API call that returns boolean value
+	// whether recipient is valid or not
+	const handleAddRecipient = async (email: string): Promise<boolean> => {
+		const verifyNotAdded: boolean = recipientsEmails.includes(email);
+		// Validation
+		if (userEmail === email) {
+			handleValidationErrors("Not allowed to add your own email!");
+			return false;
+		} else if (verifyNotAdded) {
+			handleValidationErrors(
+				"This email is already included in the recipients."
+			);
+			return false;
+		}
+
+		const validateRecipientResponse = await fetch(
+			`${BACKEND_ROUTES.VALIDATE_RECIPIENTS}/${email}`,
+			{
+				method: "GET",
+				headers: { "Content-Type": "application/json", token: authToken! },
+			}
+		);
+		const answer = await validateRecipientResponse.json();
+
+		if (!validateRecipientResponse.ok) {
+			handleValidationErrors(answer?.message);
+			return false;
+		}
+
+		if (!answer) {
+			handleValidationErrors(
+				"Could not validate recipient, please check spelling and try again."
+			);
+			return false;
+		}
+
+		setRecipientsEmails((previous) => [...previous, email]);
+		return true;
+	};
+
 	const handleResetState = () => {
 		setRecipientsIds(undefined);
-		setRecipientsEmails(undefined);
 		setRecipient(specificRecipient ? specificRecipient : "");
 		handleClose();
 	};
-	const handleSend = async () => {};
+
+	const handleCreateSesh = async () => {
+		const time = `${hour}:${selected}${morningOrEvening}`;
+
+		const body = {
+			game,
+			proposedTime: time,
+			proposedDay: day,
+			recipients: recipientsEmails,
+		};
+
+		console.log(body);
+	};
+
+	// Hook to timeout the error
+	useEffect(() => {
+		if (error) {
+			setTimeout(() => {
+				setError(false);
+				setErrorMessage(null);
+			}, 8000);
+		}
+		return () => {};
+	}, [error]);
 
 	return (
 		<Transition.Root show={open} as={Fragment}>
@@ -118,7 +191,7 @@ export const SeshSendInviteModal = ({
 											{recipientsEmails?.length ? (
 												<ul className="text-center md:text-left">
 													{recipientsEmails.map((email) => (
-														<div key={email} className="flex flex-row">
+														<div key={email} className="flex flex-row md:p-0.5">
 															<CheckCircleIcon className="h-4 w-4 text-green-600" />
 															<li className="p-0.5 text-xs text-neon-blue-900">
 																{email}
@@ -137,17 +210,29 @@ export const SeshSendInviteModal = ({
 													autoComplete="email"
 													value={recipient}
 													onChange={(e) => setRecipient(e.target.value)}
-													className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+													className="p-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 												/>
 												{recipient ? (
 													<PlusCircleIcon
 														onClick={() => {
 															handleAddRecipient(recipient);
 														}}
-														className="flex h-7 w-7 cursor-pointer justify-end text-right"
+														className={clsx(
+															"flex h-7 w-7 cursor-pointer justify-end text-right",
+															error ? "text-red-700 animate-bounce" : ""
+														)}
 													/>
 												) : null}
 											</div>
+											{error ? (
+												<div>
+													<p className="text-red-700 text-left text-xs">
+														{errorMessage}
+													</p>
+												</div>
+											) : (
+												<div />
+											)}
 										</div>
 									</section>
 									<section className="space-y-4 bg-neon-blue-100 px-4 pb-5 sm:px-6">
@@ -165,7 +250,7 @@ export const SeshSendInviteModal = ({
 												value={game}
 												onChange={(e) => setGame(e.target.value)}
 												autoComplete="text"
-												className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+												className="p-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 											/>
 										</div>
 										<div>
@@ -186,7 +271,7 @@ export const SeshSendInviteModal = ({
 												value={day}
 												onChange={(e) => setDay(e.target.value)}
 												autoComplete="text"
-												className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+												className="block p-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 											/>
 										</div>
 										<div>
@@ -299,11 +384,11 @@ export const SeshSendInviteModal = ({
 										</button>
 										<button
 											disabled={
-												recipientsIds?.length === undefined ||
-												recipientsIds?.length <= 0 ||
+												recipientsEmails?.length === undefined ||
+												recipientsEmails?.length <= 0 ||
 												!game
 											}
-											onClick={handleSend}
+											onClick={handleCreateSesh}
 											className="inline-block items-center rounded-md bg-neon-blue-600 px-2 py-2.5 text-neon-blue-50 hover:bg-neon-blue-800 disabled:pointer-events-none disabled:bg-gray-400 "
 										>
 											Send Sesh Invite
