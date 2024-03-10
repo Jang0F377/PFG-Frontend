@@ -25,7 +25,7 @@ export const SeshSendInviteModal = ({
 	userEmail,
 }: ModalProps) => {
 	const [recipientsEmails, setRecipientsEmails] = useState<Array<string>>([]);
-	const [recipientsIds, setRecipientsIds] = useState<Array<string>>();
+	const [recipientsIds, setRecipientsIds] = useState<Array<string>>([]);
 	const [recipient, setRecipient] = useState(
 		specificRecipient ? specificRecipient : ""
 	);
@@ -111,11 +111,12 @@ export const SeshSendInviteModal = ({
 		}
 
 		setRecipientsEmails((previous) => [...previous, email]);
+		setRecipientsIds((previous) => [...previous, answer]);
 		return true;
 	};
 
 	const handleResetState = () => {
-		setRecipientsIds(undefined);
+		setRecipientsIds([]);
 		setRecipient(specificRecipient ? specificRecipient : "");
 		handleClose();
 	};
@@ -127,7 +128,7 @@ export const SeshSendInviteModal = ({
 			game,
 			proposedTime: time,
 			proposedDay: day,
-			recipients: recipientsEmails,
+			recipients: recipientsIds,
 		};
 
 		console.log(body);

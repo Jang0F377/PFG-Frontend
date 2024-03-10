@@ -53,7 +53,6 @@ const DashboardPage: FC = () => {
 			setError(true);
 		}
 
-		console.log(responseBody);
 		setMe(responseBody);
 		setIsLoading(false);
 	};
@@ -76,6 +75,7 @@ const DashboardPage: FC = () => {
 
 	useEffect(() => {
 		fetchMe();
+		return () => {};
 	}, []);
 
 	if (isLoading) {
@@ -145,7 +145,7 @@ const DashboardPage: FC = () => {
 							</div>
 						</section>
 						<section className="mx-1.5 rounded-lg bg-neon-blue-50 px-2 pb-6 sm:px-3 md:mx-auto md:max-w-2xl lg:max-w-4xl lg:px-4  xl:max-w-7xl">
-							<Friends />
+							<Friends navigate={navigate} />
 						</section>
 					</main>
 					{/*Notification insert here!!*/}

@@ -5,6 +5,8 @@ import {
 import { useState } from "react";
 import { SeshSendInviteModal } from "./Modals";
 import { User } from "../../types/user";
+import { NavigateFunction } from "react-router-dom";
+import { INTERNAL_ROUTES } from "../../constants/routes";
 
 interface EmptyStateProps {
 	userEmail?: string;
@@ -68,9 +70,16 @@ export function InviteEmptyState() {
 	);
 }
 
-export function FriendListEmptyState() {
+interface FriendsListEmptyStateProps {
+	navigate: NavigateFunction;
+}
+
+export function FriendListEmptyState({ navigate }: FriendsListEmptyStateProps) {
 	return (
-		<div className="mx-auto max-w-[16rem]  rounded-xl border border-neon-blue-800/70 bg-neon-blue-50 py-2 transition duration-200 ease-in-out hover:translate-y-1 hover:scale-105 md:max-w-sm lg:hover:scale-110 ">
+		<div
+			className="mx-auto max-w-[16rem]  rounded-xl border border-neon-blue-800/70 bg-neon-blue-50 py-2 transition duration-200 ease-in-out hover:translate-y-1 hover:scale-105 md:max-w-sm lg:hover:scale-110"
+			onClick={() => navigate(INTERNAL_ROUTES.GLOBAL_USERS_PAGE)}
+		>
 			<h2 className="px-0.5 text-lg font-medium text-neon-blue-800 lg:px-1">
 				Add your first friend!
 			</h2>

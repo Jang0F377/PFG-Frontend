@@ -10,6 +10,7 @@ import AuthenticatedLayout from "./layouts/AuthenticatedLayout";
 import DashboardPage from "./pages/dashboard/Dashboard";
 import SupportPage from "./pages/support/SupportPage";
 import UsersPage from "./pages/users/UsersPage";
+import AccountPage from "./pages/account/AccountPage";
 
 const IndexRoutes: FC = () => (
 	<BrowserRouter>
@@ -31,6 +32,7 @@ const IndexRoutes: FC = () => (
 					element={<UsersPage />}
 				/>
 				<Route path={INTERNAL_ROUTES.SUPPORT_PAGE} element={<SupportPage />} />
+				<Route path={INTERNAL_ROUTES.ACCOUNT_PAGE} element={<AccountPage />} />
 			</Route>
 		</Routes>
 	</BrowserRouter>

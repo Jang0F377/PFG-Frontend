@@ -5,7 +5,9 @@ import { BACKEND_ROUTES, INTERNAL_ROUTES } from "../../constants/routes";
 const LoginPage: FC = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
-	const justRegistered = location.state?.justRegistered;
+	const reason = location.state?.reason;
+	const message = location.state?.message;
+	const extraMessage = location.state?.extraMessage;
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState<boolean>(false);
@@ -95,13 +97,11 @@ const LoginPage: FC = () => {
 
 				<div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
 					<div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-						{justRegistered ? (
+						{reason ? (
 							<div>
+								<p className="text-green-700 text-center text-sm">{message}</p>
 								<p className="text-green-700 text-center text-sm">
-									Registration Successful.
-								</p>
-								<p className="text-green-700 text-center text-sm">
-									Please log in.
+									{extraMessage}
 								</p>
 							</div>
 						) : (

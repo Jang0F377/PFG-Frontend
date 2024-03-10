@@ -1,12 +1,17 @@
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon, Bars3Icon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Fragment } from "react/jsx-runtime";
 import { HeaderDashboardNavLinks } from "../common/NavLinks";
-import { INTERNAL_ROUTES } from "../../constants/routes";
+import {
+	INTERNAL_ROUTES,
+	REASONS,
+	ROUTES_STATE_MESSAGE,
+} from "../../constants/routes";
 
 const DashboardHeader = () => {
+	const navigate = useNavigate();
 	const navigation = [
 		["Dashboard", "/dashboard"],
 		["Friends", "/dashboard#friends"],
@@ -14,6 +19,18 @@ const DashboardHeader = () => {
 		["Support PFG", "/support"],
 		["Account", "/account"],
 	];
+
+	const handleSignOut = async () => {
+		sessionStorage.clear();
+		navigate(INTERNAL_ROUTES.LOGIN_PAGE, {
+			replace: true,
+			state: {
+				reason: REASONS.SIGN_OUT,
+				message: ROUTES_STATE_MESSAGE.SIGN_OUT.message,
+				extraMessage: ROUTES_STATE_MESSAGE.SIGN_OUT.extraMessage,
+			},
+		});
+	};
 
 	return (
 		<>
@@ -81,7 +98,7 @@ const DashboardHeader = () => {
 														<Menu.Item>
 															{({ active }) => (
 																<a
-																	onClick={() => console.log("TODO")}
+																	onClick={handleSignOut}
 																	className={clsx(
 																		active ? "bg-gray-100" : "",
 																		"block cursor-pointer px-4 py-2 text-sm text-gray-700"
@@ -156,7 +173,7 @@ const DashboardHeader = () => {
 										Settings
 									</Disclosure.Button>
 									<Disclosure.Button
-										onClick={() => console.log("TODO")}
+										onClick={handleSignOut}
 										as="a"
 										className="block cursor-pointer rounded-md px-3 py-2 text-base font-medium text-neon-blue-900 hover:bg-neon-blue-800 hover:text-white hover:ring-1 hover:ring-neon-blue-50"
 									>

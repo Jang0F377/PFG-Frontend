@@ -16,4 +16,21 @@ export const BACKEND_ROUTES = {
 	GET_ME_URL: "http://localhost:3000/users/me",
 	VALIDATE_RECIPIENTS: "http://localhost:3000/users/validate-recipient",
 	CREATE_SESH_URL: "http://localhost:3000/sesh/create",
+	SET_FAVORITE_GAMES_URL: "http://localhost:3000/users/me/favorites",
+};
+
+export const REASONS = {
+	REGISTRATION: "global.registration",
+	SIGN_OUT: "global.signOut",
+};
+
+export const ROUTES_STATE_MESSAGE = {
+	JUST_REGISTERED: {
+		message: "Registration Successful.",
+		extraMessage: "Please log in.",
+	},
+	SIGN_OUT: {
+		message: "Sign out Successful.",
+		extraMessage: "See you next time!",
+	},
 };

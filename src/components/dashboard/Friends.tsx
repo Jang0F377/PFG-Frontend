@@ -3,8 +3,13 @@ import {
 	FriendListEmptyState,
 	FriendInviteEmptyState,
 } from "../common/EmptyState";
+import { NavigateFunction } from "react-router-dom";
 
-const Friends: React.FC = () => {
+interface FriendsProps {
+	navigate: NavigateFunction;
+}
+
+const Friends: React.FC<FriendsProps> = ({ navigate }) => {
 	return (
 		<div id="friends">
 			<main className="bg-neon-blue-50 pt-3  ">
@@ -14,7 +19,7 @@ const Friends: React.FC = () => {
 							Friends list
 						</h1>
 						<div className="flex h-96 items-center rounded-lg border-4 border border-neon-blue-800/50">
-							<FriendListEmptyState />
+							<FriendListEmptyState navigate={navigate} />
 						</div>
 					</div>
 				</section>
