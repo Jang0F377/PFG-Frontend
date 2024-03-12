@@ -1,13 +1,11 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { User } from "../../types/user";
 import LoadingPage from "../loading/LoadingPage";
 import { ErrorPage } from "../error/Error";
 import { BACKEND_ROUTES, INTERNAL_ROUTES } from "../../constants/routes";
-import { useNavigate } from "react-router-dom";
 import useAsyncEffect from "use-async-effect";
 
 const AccountPage: FC = () => {
-	const navigate = useNavigate();
 	const authObject = sessionStorage.getItem("pfg-auth");
 	const token = authObject ? JSON.parse(authObject).token : undefined;
 	const [game1, setGame1] = useState("");

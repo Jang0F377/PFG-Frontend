@@ -28,6 +28,10 @@ module.exports = {
 			"9xl": ["8rem", { lineHeight: "1" }],
 		},
 		extend: {
+			animation: {
+				"custom-bounce": "bounce 1s 5",
+				"custom-spin": "spin 1s linear 2",
+			},
 			borderRadius: {
 				"4xl": "2rem",
 			},

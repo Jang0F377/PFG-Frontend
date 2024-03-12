@@ -17,6 +17,8 @@ export const BACKEND_ROUTES = {
 	VALIDATE_RECIPIENTS: "http://localhost:3000/users/validate-recipient",
 	CREATE_SESH_URL: "http://localhost:3000/sesh/create",
 	SET_FAVORITE_GAMES_URL: "http://localhost:3000/users/me/favorites",
+	GET_SPECIFIC_USER_URL: "http://localhost:3000/users",
+	SESH_BASE_URL: "http://localhost:3000/sesh",
 };
 
 export const REASONS = {

@@ -1,7 +1,6 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { Transition } from "@headlessui/react";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import { XMarkIcon } from "@heroicons/react/20/solid";
 
 interface GeneralNotificationsProps {
 	success: boolean;
@@ -63,18 +62,6 @@ export const GeneralNotification = ({
 										</p>
 									</div>
 								)}
-								<div className="ml-4 flex flex-shrink-0">
-									<button
-										type="button"
-										className="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-										onClick={() => {
-											outShow = !outShow;
-										}}
-									>
-										<span className="sr-only">Close</span>
-										<XMarkIcon className="h-5 w-5" aria-hidden="true" />
-									</button>
-								</div>
 							</div>
 						</div>
 					</div>
