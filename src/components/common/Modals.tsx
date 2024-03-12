@@ -11,7 +11,7 @@ import {
 	ChevronRightIcon,
 } from "@heroicons/react/20/solid";
 import clsx from "clsx";
-import { BACKEND_ROUTES, INTERNAL_ROUTES } from "../../constants/routes";
+import { BACKEND_ROUTES } from "../../constants/routes";
 
 interface ModalProps {
 	open: boolean;
@@ -130,15 +130,25 @@ export const SeshSendInviteModal = ({
 	};
 
 	const handleResetState = () => {
-		setRecipientsIds([]);
-		setRecipientsEmails([]);
-		setGame("");
-		setDay("today");
-		setRecipient(specificRecipient ? specificRecipient : "");
-		setSeshCreatedError(false);
-		setSeshCreatedSuccessfully(false);
-		window.location.reload();
-		// handleClose();
+		if (seshCreatedSuccessfully) {
+			setRecipientsIds([]);
+			setRecipientsEmails([]);
+			setGame("");
+			setDay("today");
+			setRecipient(specificRecipient ? specificRecipient : "");
+			setSeshCreatedError(false);
+			setSeshCreatedSuccessfully(false);
+			window.location.reload();
+		} else {
+			setRecipientsIds([]);
+			setRecipientsEmails([]);
+			setGame("");
+			setDay("today");
+			setRecipient(specificRecipient ? specificRecipient : "");
+			setSeshCreatedError(false);
+			setSeshCreatedSuccessfully(false);
+			handleClose();
+		}
 	};
 
 	// Api call to handle sesh creation

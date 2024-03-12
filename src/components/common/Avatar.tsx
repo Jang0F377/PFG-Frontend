@@ -1,16 +1,17 @@
 import clsx from "clsx";
 
 interface AvatarProps {
-	image: string;
+	email?: string;
 	size: string;
 }
 
-const CustomAvatar = ({ image, size }: AvatarProps) => {
+const CustomAvatar = ({ email, size }: AvatarProps) => {
+	const initials = email?.substring(0, 3);
 	return (
-		<>
-			<img
+		<div className="mx-auto my-auto  md:p-0.5  bg-neon-blue-600 rounded-full">
+			<p
 				className={clsx(
-					"z-20 mx-auto inline-block rounded-full",
+					"z-20 font-semibold md:text-lg items-center flex justify-center  text-white ",
 					size === "xs"
 						? "h-6 w-6"
 						: size === "sm"
@@ -23,10 +24,10 @@ const CustomAvatar = ({ image, size }: AvatarProps) => {
 										? "h-14 w-14"
 										: "h-6 w-6"
 				)}
-				src={image}
-				alt="ERR"
-			/>
-		</>
+			>
+				{initials}
+			</p>
+		</div>
 	);
 };
 

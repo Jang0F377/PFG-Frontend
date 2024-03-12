@@ -2,8 +2,9 @@ import { FC, useState } from "react";
 import { User } from "../../types/user";
 import LoadingPage from "../loading/LoadingPage";
 import { ErrorPage } from "../error/Error";
-import { BACKEND_ROUTES, INTERNAL_ROUTES } from "../../constants/routes";
+import { BACKEND_ROUTES } from "../../constants/routes";
 import useAsyncEffect from "use-async-effect";
+import CustomAvatar from "../../components/common/Avatar";
 
 const AccountPage: FC = () => {
 	const authObject = sessionStorage.getItem("pfg-auth");
@@ -12,7 +13,7 @@ const AccountPage: FC = () => {
 	const [game2, setGame2] = useState("");
 	const [game3, setGame3] = useState("");
 	const [editing, setEditing] = useState(false);
-	const [me, setMe] = useState<any>();
+	const [me, setMe] = useState<User>();
 	const [isLoading, setIsLoading] = useState(false);
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
@@ -131,11 +132,7 @@ const AccountPage: FC = () => {
 									Photo
 								</label>
 								<div className="mt-1 flex items-center justify-between">
-									<img
-										className="inline-block h-12 w-12 rounded-full"
-										src={me?.image}
-										alt="ERR"
-									/>
+									<CustomAvatar email={me?.email} size="md" />
 									{/*<div className="ml-4 flex">*/}
 									{/*  <div*/}
 									{/*    onClick={() => alert("Functionality in progress")}*/}
@@ -185,7 +182,7 @@ const AccountPage: FC = () => {
 														<input
 															type={"text"}
 															value={game1}
-															placeholder={me.favoriteGames[0]}
+															placeholder={me?.favoriteGames[0]}
 															autoComplete="text"
 															onChange={(e) => setGame1(e.target.value)}
 															className="block w-full appearance-none rounded-md border border-gray-300 px-2 py-1.5 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
@@ -193,7 +190,7 @@ const AccountPage: FC = () => {
 														<input
 															type={"text"}
 															autoComplete="text"
-															placeholder={me.favoriteGames[1]}
+															placeholder={me?.favoriteGames[1]}
 															value={game2}
 															onChange={(e) => setGame2(e.target.value)}
 															className="block w-full appearance-none rounded-md border border-gray-300 px-2 py-1.5 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
@@ -201,7 +198,7 @@ const AccountPage: FC = () => {
 														<input
 															type={"text"}
 															value={game3}
-															placeholder={me.favoriteGames[2]}
+															placeholder={me?.favoriteGames[2]}
 															autoComplete="text"
 															onChange={(e) => setGame3(e.target.value)}
 															className="block w-full appearance-none rounded-md border border-gray-300 px-2 py-1.5 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
