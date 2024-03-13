@@ -152,10 +152,10 @@ const DashboardHeader = () => {
                   </div>
                   <div className="ml-3 space-y-1">
                     <div className="text-xs font-medium leading-none text-neon-blue-tone-300">
-                      {email.split('@')[0]}
+                      {email ? email.split('@')[0] : ''}
                     </div>
                     <div className="text-sm font-medium leading-none text-neon-blue-tone-100">
-                      {email}
+                      {email ? email : ''}
                     </div>
                   </div>
                 </div>
