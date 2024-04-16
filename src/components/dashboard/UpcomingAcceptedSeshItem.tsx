@@ -56,7 +56,7 @@ const UpcomingAcceptedSeshItems = ({
   return (
     <>
       {sesh && (
-        <div className="my-1 flex h-[90%] flex-col rounded-lg bg-neon-blue-50 p-1  ">
+        <div className="my-1 flex  flex-col rounded-lg bg-neon-blue-50 p-1  ">
           <header className="py-1">
             <p className="right-2 top-2 text-right text-xs ">
               Created on: {date.split('.')[0]}

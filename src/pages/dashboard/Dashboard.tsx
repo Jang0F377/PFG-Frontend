@@ -104,12 +104,12 @@ const DashboardPage: FC = () => {
           </div>
 
           <main className="mx-3 -mt-32 space-y-3 pt-3">
-            <section className="mx-1.5 flex pb-3   md:mx-auto md:pb-6">
-              <div className="mx-auto items-center justify-center rounded-lg bg-neon-blue-200 px-5 py-6 text-center  sm:px-6">
+            <section className=" mx-2 flex pb-3  md:mx-auto md:max-w-3xl md:pb-6 lg:max-w-5xl">
+              <div className="mx-auto  items-center  justify-center rounded-lg bg-neon-blue-200 px-5 py-6 text-center sm:px-6 ">
                 <h1 className="-mt-5  text-left text-xl font-medium">
                   Upcoming Seshes
                 </h1>
-                <div className="flex flex-row flex-wrap items-center justify-evenly space-x-2  space-y-1 rounded-lg border-4 border-neon-blue-800/50 px-2 py-2 md:px-2 lg:space-x-4">
+                <div className=" flex w-fit flex-row flex-wrap items-center justify-evenly space-x-2 space-y-1.5 rounded-lg  border-4 border-neon-blue-800/50 px-2  py-2 md:space-y-1  lg:space-x-4  ">
                   {upcomingSeshes?.length ? (
                     upcomingSeshes.map((sesh, idx) => (
                       <UpcomingAcceptedSeshItems
@@ -124,12 +124,12 @@ const DashboardPage: FC = () => {
               </div>
             </section>
 
-            <section className="mx-1.5 flex pb-3  md:mx-auto md:pb-6">
-              <div className="mx-auto  items-center justify-center rounded-lg bg-neon-blue-200 px-5 py-6 text-center  sm:px-6">
+            <section className=" mx-2 flex pb-3  md:mx-auto md:max-w-3xl md:pb-6 lg:max-w-5xl">
+              <div className="mx-auto  items-center  justify-center rounded-lg bg-neon-blue-200 px-5 py-6 text-center sm:px-6 ">
                 <h1 className="-mt-2  text-left text-xl font-medium">
                   Pending Sesh invites
                 </h1>
-                <div className="flex flex-row flex-wrap items-center justify-evenly space-x-2 space-y-1 rounded-lg border-4 border-neon-blue-800/50 px-2 py-2 md:px-2 lg:space-x-4">
+                <div className=" flex w-fit flex-row flex-wrap items-center justify-center space-x-2 space-y-1.5 rounded-lg  border-4 border-neon-blue-800/50 px-2  py-2 md:space-y-1  lg:space-x-4  ">
                   {incomingSeshInvites?.length ? (
                     incomingSeshInvites.map((sesh, idx) => (
                       <IncomingSeshInviteItems
