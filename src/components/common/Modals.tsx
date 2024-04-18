@@ -571,8 +571,6 @@ export const SendFriendRequestModal = ({
   open,
   handleClose,
   specificRecipient,
-  authToken,
-  userEmail,
 }: ModalProps) => {
   const [inputClicked, setInputClicked] = useState(false);
   const handleRecipientClick = () => {
