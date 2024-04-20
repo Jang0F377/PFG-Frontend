@@ -4,8 +4,8 @@
 
 > **NOTE:** If you want to log in to check it out feel free to use these credentials:
 >
->! - U: test@test.com
->! - P: pass12345
+> - U: test@test.com 
+> - P: pass12345
 
 #### Frontend of the full stack concept app I thought of.
 
