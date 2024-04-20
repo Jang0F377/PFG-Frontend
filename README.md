@@ -1,5 +1,12 @@
 # PFG-Messenger Web App
 
+## Check out the live site [here](http://my-home-project.us)
+
+> **NOTE:** If you want to log in to check it out feel free to use these credentials:
+>
+>! - U: test@test.com
+>! - P: pass12345
+
 #### Frontend of the full stack concept app I thought of.
 
 - Made with the Vite.JS framework using Typescript and React.JS

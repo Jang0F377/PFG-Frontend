@@ -1,7 +1,7 @@
 version: '3.5'
 
 networks:
-  ext-pfg-network:
+  pfg-network:
     name: pfg-network
     external: true
 
@@ -15,7 +15,7 @@ services:
       target: deps
     command: npm run dev --host
     networks:
-      - ext-pfg-network
+      - pfg-network
     volumes:
       - .:/app
       - /app/node_modules
