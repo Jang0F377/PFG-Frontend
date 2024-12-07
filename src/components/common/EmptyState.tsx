@@ -13,7 +13,7 @@ export function EmptyState({ handleShow }: EmptyStateProps) {
   return (
     <div
       onClick={() => handleShow()}
-      className="m-4 rounded-xl border border-neon-blue-800/70 bg-neon-blue-50  p-2 transition duration-200 ease-in-out hover:translate-y-1 hover:scale-105 md:m-10 md:p-5 lg:hover:scale-110 "
+      className="m-4 rounded-xl border border-neon-blue-800/70 bg-neon-blue-50  p-2 transition duration-200 ease-in-out hover:translate-y-1 hover:scale-105 md:m-10 md:p-5 "
     >
       <h2 className="px-0.5 text-lg font-medium text-neon-blue-800 lg:px-1">
         Create your first Sesh!
@@ -22,7 +22,7 @@ export function EmptyState({ handleShow }: EmptyStateProps) {
         Send a Sesh invite to someone by email.
       </p>
       <p className="mt-1 px-0.5 text-sm text-neon-blue-tone-200 lg:px-1">
-        Then upcoming Seshes will show up here!
+        Then your upcoming created Seshes will show up here!
       </p>
       <div className="mx-auto mt-6 flex justify-center">
         <div className="mx-auto justify-center text-center">
@@ -38,7 +38,7 @@ export function EmptyState({ handleShow }: EmptyStateProps) {
 
 export function InviteEmptyState() {
   return (
-    <div className="m-4 rounded-xl border border-neon-blue-800/70 bg-neon-blue-50  p-2 transition duration-200 ease-in-out hover:translate-y-1 hover:scale-105 md:m-10 md:p-5 lg:hover:scale-110 ">
+    <div className="m-4 rounded-xl border border-neon-blue-800/70 bg-neon-blue-50  p-2 transition duration-200 ease-in-out hover:translate-y-1 hover:scale-105 md:m-10 md:p-5">
       <EnvelopeOpenIcon className="mx-auto h-14 w-14 text-neon-blue-700" />
       <h3 className="mt-2 text-sm font-medium text-neon-blue-800">
         No invites
@@ -57,7 +57,7 @@ interface FriendsListEmptyStateProps {
 export function FriendListEmptyState({ navigate }: FriendsListEmptyStateProps) {
   return (
     <div
-      className="mx-4 rounded-xl  border border-neon-blue-800/70 bg-neon-blue-50 py-2 transition duration-200 ease-in-out hover:translate-y-1 hover:scale-105 md:mx-8 md:max-w-sm lg:hover:scale-110"
+      className="mx-4 rounded-xl  border border-neon-blue-800/70 bg-neon-blue-50 py-2 transition duration-200 ease-in-out hover:translate-y-1 hover:scale-105 md:mx-8 md:max-w-sm"
       onClick={() => navigate(INTERNAL_ROUTES.GLOBAL_USERS_PAGE)}
     >
       <h2 className="px-0.5 text-lg font-medium text-neon-blue-800 lg:px-1">
@@ -96,7 +96,7 @@ export function FriendListEmptyState({ navigate }: FriendsListEmptyStateProps) {
 
 export function FriendInviteEmptyState() {
   return (
-    <div className=" mx-4 max-w-[16rem] rounded-xl border border-neon-blue-800/70 bg-neon-blue-50 p-3 transition duration-200 ease-in-out hover:translate-y-1 hover:scale-105 md:mx-8 lg:hover:scale-110 ">
+    <div className=" mx-4 max-w-[16rem] rounded-xl border border-neon-blue-800/70 bg-neon-blue-50 p-3 transition duration-200 ease-in-out hover:translate-y-1 hover:scale-105 md:mx-8 ">
       <EnvelopeOpenIcon className="mx-auto h-14 w-14 text-neon-blue-700" />
       <h3 className="mt-2 text-sm font-medium text-neon-blue-800">
         No invites yet

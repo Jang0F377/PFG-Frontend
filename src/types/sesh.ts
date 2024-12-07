@@ -1,13 +1,18 @@
+import { User } from './user';
+
 export interface Sesh {
-	_id?: string;
-	game: string;
-	proposedDay: string;
-	proposedTime: string;
-	recipients: Array<string>;
-	sentFrom: string;
-	_createdAt: number;
-	usersConfirmed: Array<string>;
-	usersDeclined: Array<string>;
-	usersUnconfirmed: Array<string>;
-	updatedAt?: string;
+  id?: string;
+  game: string;
+  proposed_date: string;
+  proposed_time: string;
+  recipients: Array<string>;
+  sesh_created_by: string;
+  created_at: string;
+  updated_at?: string;
+  num_recipients?: number;
+  num_accepted?: number;
+  num_declined?: number;
+  sesh_id?: string;
+  answer?: 'accepted' | 'declined';
+  sender?: User;
 }

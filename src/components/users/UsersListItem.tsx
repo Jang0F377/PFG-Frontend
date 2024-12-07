@@ -27,7 +27,7 @@ const UserListItem = ({ user, authToken, userEmail }: UserListProps) => {
   const handleCloseSeshModal = () => {
     setShowSeshModal(false);
   };
-  const gamesPlayed = user?.favoriteGames?.slice(0, 3);
+  const gamesPlayed = user?.favorite_games?.slice(0, 3);
 
   return (
     <div className="m-3 mx-auto w-[18rem] justify-center rounded-lg bg-neon-blue-300 shadow md:mx-0">

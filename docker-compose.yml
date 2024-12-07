@@ -1,8 +1,6 @@
-version: '3.5'
-
 networks:
   pfg-network:
-    name: pfg-network
+    name: pfg_backend_pfg-network
     external: true
 
 services:

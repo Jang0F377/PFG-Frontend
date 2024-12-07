@@ -12,7 +12,7 @@ import Friends from '../../components/dashboard/Friends';
 import useAsyncEffect from 'use-async-effect';
 import IncomingSeshInviteItems from '../../components/dashboard/IncomingSeshInviteItem';
 import { Sesh } from '../../types/sesh';
-import UpcomingAcceptedSeshItems from '../../components/dashboard/UpcomingAcceptedSeshItem';
+import UpcomingCreatedSeshItem from '../../components/dashboard/UpcomingCreatedSeshItem';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import { SeshSendInviteModal } from '../../components/common/Modals';
 
@@ -32,7 +32,12 @@ const DashboardPage: FC = () => {
   const [incomingSeshInvites, setIncomingSeshInvites] = useState<
     (string | Sesh)[]
   >([]);
-  const [upcomingSeshes, setUpcomingSeshes] = useState<(string | Sesh)[]>([]);
+  const [upcomingCreatedSeshes, setUpcomingCreatedSeshes] = useState<
+    (string | Sesh)[]
+  >([]);
+  const [upcomingAcceptedSeshes, setUpcomingAcceptedSeshes] = useState<
+    (string | Sesh)[]
+  >([]);
   const [showModal, setShowModal] = useState(false);
 
   const handleShowModal = () => {
@@ -45,7 +50,10 @@ const DashboardPage: FC = () => {
   const fetchMe = async (): Promise<User> => {
     const response = await fetch(BACKEND_ROUTES.GET_ME_URL, {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json', token: token },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     const responseBody = await response.json();
@@ -63,7 +71,7 @@ const DashboardPage: FC = () => {
     }
 
     setIsLoading(false);
-    return responseBody;
+    return responseBody?.data;
   };
 
   useAsyncEffect(async (isMounted) => {
@@ -71,8 +79,9 @@ const DashboardPage: FC = () => {
     if (!isMounted()) return;
     console.log(userObject);
     setMe(userObject);
-    setIncomingSeshInvites(userObject?.upcomingUndecidedSeshes);
-    setUpcomingSeshes(userObject?.upcomingAcceptedSeshes);
+    setIncomingSeshInvites(userObject?.sesh_invites);
+    setUpcomingCreatedSeshes(userObject?.upcoming_created_seshes);
+    setUpcomingAcceptedSeshes(userObject?.upcoming_accepted_seshes);
   }, []);
 
   if (isLoading) {
@@ -103,18 +112,19 @@ const DashboardPage: FC = () => {
             </header>
           </div>
 
-          <main className="mx-3 -mt-32 space-y-3 pt-3">
-            <section className=" mx-2 flex pb-3  md:mx-auto md:max-w-3xl md:pb-6 lg:max-w-5xl">
+          <main className="mx-3 -mt-32 space-y-3 pt-3 ">
+            <section className="mx-auto max-w-7xl">
               <div className="mx-auto  items-center  justify-center rounded-lg bg-neon-blue-200 px-5 py-6 text-center sm:px-6 ">
-                <h1 className="-mt-5  text-left text-xl font-medium">
-                  Upcoming Seshes
+                <h1 className="-mt-2  text-left text-xl font-medium">
+                  Upcoming Created Seshes
                 </h1>
-                <div className=" flex w-fit flex-row flex-wrap items-center justify-evenly space-x-2 space-y-1.5 rounded-lg  border-4 border-neon-blue-800/50 px-2  py-2 md:space-y-1  lg:space-x-4  ">
-                  {upcomingSeshes?.length ? (
-                    upcomingSeshes.map((sesh, idx) => (
-                      <UpcomingAcceptedSeshItems
+                <div className=" mx-auto flex flex-row flex-wrap items-center justify-center space-x-2 space-y-1.5 rounded-lg border-4  border-neon-blue-800/50 px-2  py-2   md:space-y-1 lg:space-x-4 ">
+                  {upcomingCreatedSeshes?.length ? (
+                    upcomingCreatedSeshes.map((sesh, idx) => (
+                      <UpcomingCreatedSeshItem
                         key={idx}
                         sesh={sesh as Sesh}
+                        userObject={me as User}
                       />
                     ))
                   ) : (
@@ -124,12 +134,12 @@ const DashboardPage: FC = () => {
               </div>
             </section>
 
-            <section className=" mx-2 flex pb-3  md:mx-auto md:max-w-3xl md:pb-6 lg:max-w-5xl">
+            <section className="mx-auto max-w-7xl">
               <div className="mx-auto  items-center  justify-center rounded-lg bg-neon-blue-200 px-5 py-6 text-center sm:px-6 ">
                 <h1 className="-mt-2  text-left text-xl font-medium">
-                  Pending Sesh invites
+                  Upcoming Sesh invites
                 </h1>
-                <div className=" flex w-fit flex-row flex-wrap items-center justify-center space-x-2 space-y-1.5 rounded-lg  border-4 border-neon-blue-800/50 px-2  py-2 md:space-y-1  lg:space-x-4  ">
+                <div className="mx-auto flex flex-row flex-wrap items-center justify-center space-x-2 space-y-1.5 rounded-lg border-4  border-neon-blue-800/50 px-2  py-2   md:space-y-1 lg:space-x-4 ">
                   {incomingSeshInvites?.length ? (
                     incomingSeshInvites.map((sesh, idx) => (
                       <IncomingSeshInviteItems
@@ -144,7 +154,7 @@ const DashboardPage: FC = () => {
                 </div>
               </div>
             </section>
-            <section className="mx-1.5 rounded-lg bg-neon-blue-50 px-2 pb-6 sm:px-3 md:mx-auto md:max-w-2xl lg:max-w-4xl lg:px-4  xl:max-w-7xl">
+            <section className="mx-auto max-w-7xl pb-3">
               <Friends navigate={navigate} />
             </section>
           </main>

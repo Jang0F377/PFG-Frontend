@@ -17,7 +17,7 @@ const UsersPage = () => {
   const [authToken, setAuthToken] = useState<string | undefined>(undefined);
 
   const fetchUsers = async () => {
-    const response = await fetch(BACKEND_ROUTES.GET_ALL_USERS_URL, {
+    const response = await fetch(BACKEND_ROUTES.USER_BASE_URL, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
@@ -25,12 +25,10 @@ const UsersPage = () => {
     if (!response.ok) {
       setError(true);
     }
-    console.log(response);
 
     const responseBody = await response.json();
-    console.log(responseBody);
 
-    setGlobalUsers(responseBody);
+    setGlobalUsers(responseBody?.data);
     setIsLoading(false);
   };
 

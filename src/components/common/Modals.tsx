@@ -105,8 +105,11 @@ export const SeshSendInviteModal = ({
     const validateRecipientResponse = await fetch(
       `${BACKEND_ROUTES.VALIDATE_RECIPIENTS}/${email}`,
       {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json', token: authToken! },
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authToken}`,
+        },
       },
     );
     const answer = await validateRecipientResponse.json();
@@ -116,7 +119,7 @@ export const SeshSendInviteModal = ({
       return false;
     }
 
-    if (!answer) {
+    if (!answer?.data) {
       handleValidationErrors(
         'Could not validate recipient, please check spelling and try again.',
       );
@@ -124,7 +127,7 @@ export const SeshSendInviteModal = ({
     }
 
     setRecipientsEmails((previous) => [...previous, email]);
-    setRecipientsIds((previous) => [...previous, answer]);
+    setRecipientsIds((previous) => [...previous, answer?.data]);
     setRecipient('');
     return true;
   };
@@ -153,16 +156,33 @@ export const SeshSendInviteModal = ({
 
   // Api call to handle sesh creation
   const handleCreateSesh = async () => {
-    /**
+    let dateToUse: string; /**
      * Local validation
      */
-    if (day !== 'today' && day !== 'tomorrow') {
-      var dateRegEx = /^\d{1,2}[/]\d{1,2}[/]\d{2,4}$/;
+    if (day === 'today') {
+      dateToUse = new Date()
+        .toLocaleString('en-US', {
+          timeZone: 'UTC',
+        })
+        .split(',')[0]
+        .replaceAll('/', '-');
+    } else if (day === 'tomorrow') {
+      const newDate = new Date();
+      newDate.setDate(newDate.getDate() + 1);
+      dateToUse = newDate
+        .toLocaleString('en-US', {
+          timeZone: 'UTC',
+        })
+        .split(',')[0]
+        .replaceAll('/', '-');
+    } else {
+      var dateRegEx = /^\d{1,2}[-]\d{1,2}[-]\d{2,4}$/;
       const properDate = day.match(dateRegEx);
-      const year = day.split('/')[2];
+      const year = day.split('-')[2];
+      dateToUse = day;
       if (!properDate) {
         setErrorMessage(
-          "Either use 'today' or 'tomorrow' or put in date format - MM/DD/YYYY",
+          "Either use 'today' or 'tomorrow' or put in date format - MM-DD-YYYY",
         );
         setDateError(true);
         return;
@@ -174,18 +194,24 @@ export const SeshSendInviteModal = ({
         return;
       }
     }
-
+    if (hour < 10) {
+      hour.toString().padStart(2, '0');
+    }
+    console.log(dateToUse);
     // prepare the body
-    const time = `${hour}:${selected}${morningOrEvening}`;
+    const time = `${hour}:${selected} ${morningOrEvening}`;
     const body = JSON.stringify({
       game,
-      proposedTime: time,
-      proposedDay: day,
+      proposed_time: time,
+      proposed_date: dateToUse,
       recipients: recipientsIds,
     });
     const createSeshCall = await fetch(BACKEND_ROUTES.CREATE_SESH_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', token: authToken! },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${authToken}`,
+      },
       body,
     });
 
