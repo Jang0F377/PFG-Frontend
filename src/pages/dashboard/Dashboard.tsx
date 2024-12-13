@@ -113,12 +113,12 @@ const DashboardPage: FC = () => {
           </div>
 
           <main className="mx-3 -mt-32 space-y-3 pt-3 ">
-            <section className="mx-auto max-w-7xl">
+            <section className="mx-auto max-w-7xl ">
               <div className="mx-auto  items-center  justify-center rounded-lg bg-neon-blue-200 px-5 py-6 text-center sm:px-6 ">
                 <h1 className="-mt-2  text-left text-xl font-medium">
                   Upcoming Created Seshes
                 </h1>
-                <div className=" mx-auto flex flex-row flex-wrap items-center justify-center space-x-2 space-y-1.5 rounded-lg border-4  border-neon-blue-800/50 px-2  py-2   md:space-y-1 lg:space-x-4 ">
+                <div className="flex flex-row flex-wrap items-center justify-center gap-x-2 gap-y-2 rounded-lg border-4  border-neon-blue-800/50 ">
                   {upcomingCreatedSeshes?.length ? (
                     upcomingCreatedSeshes.map((sesh, idx) => (
                       <UpcomingCreatedSeshItem
@@ -137,9 +137,9 @@ const DashboardPage: FC = () => {
             <section className="mx-auto max-w-7xl">
               <div className="mx-auto  items-center  justify-center rounded-lg bg-neon-blue-200 px-5 py-6 text-center sm:px-6 ">
                 <h1 className="-mt-2  text-left text-xl font-medium">
-                  Upcoming Sesh invites
+                  Upcoming Sesh Invites
                 </h1>
-                <div className="mx-auto flex flex-row flex-wrap items-center justify-center space-x-2 space-y-1.5 rounded-lg border-4  border-neon-blue-800/50 px-2  py-2   md:space-y-1 lg:space-x-4 ">
+                <div className="flex flex-row flex-wrap items-center justify-center gap-x-2 gap-y-2 rounded-lg border-4  border-neon-blue-800/50 ">
                   {incomingSeshInvites?.length ? (
                     incomingSeshInvites.map((sesh, idx) => (
                       <IncomingSeshInviteItems

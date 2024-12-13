@@ -120,18 +120,18 @@ const IncomingSeshInviteItems = ({
 
   useAsyncEffect(async (isMounted) => {
     if (!isMounted()) return;
-    setIsLoading(false);
     const seshInfo: Sesh = await fetchSeshInfo();
     console.log('seshInfo', seshInfo);
     setSendersDetails(seshInfo?.sender);
     delete seshInfo?.sender;
     setSeshInfo(seshInfo);
+    setIsLoading(false);
   }, []);
 
   return (
     <>
-      {seshInfo && (
-        <div className="my-1 flex h-[90%] flex-col rounded-lg bg-neon-blue-50 p-1  ">
+      {!isLoading && (
+        <div className="my-1 flex flex-col rounded-lg bg-neon-blue-50 p-1  ">
           <header className="py-1">
             <h1 className="text-center text-3xl font-medium text-neon-blue-900">
               Sesh Invite
@@ -199,6 +199,13 @@ const IncomingSeshInviteItems = ({
                     {decline}
                   </button>
                 </span>
+                <button
+                  disabled={selected !== confirm && selected !== decline}
+                  onClick={handleSubmitDecision}
+                  className="my-0.5 inline-block rounded-lg bg-neon-blue-600 px-1.5 py-2 text-sm font-medium text-neon-blue-50 hover:bg-neon-blue-800 disabled:bg-gray-400"
+                >
+                  Make Decision
+                </button>
               </div>
             ) : givenAnswer === 'accepted' ? (
               <div className="inline-block rounded bg-green-700 px-1 py-0.5 text-sm font-medium text-green-50 md:mx-3 md:px-2 md:py-1 lg:text-base">
@@ -210,15 +217,6 @@ const IncomingSeshInviteItems = ({
               </div>
             )}
 
-            {selected === confirm || selected === decline ? (
-              <button
-                disabled={selected !== confirm && selected !== decline}
-                onClick={handleSubmitDecision}
-                className="my-0.5 inline-block rounded-lg bg-neon-blue-600 px-1.5 py-2 text-sm font-medium text-neon-blue-50 hover:bg-neon-blue-800 disabled:bg-gray-400"
-              >
-                Make Decision
-              </button>
-            ) : null}
             <div className="mx-auto my-1 flex w-full flex-row justify-evenly ">
               <div className="flex flex-row space-x-2">
                 <p className="font-medium text-neon-blue-900">

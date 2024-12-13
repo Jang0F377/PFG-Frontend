@@ -186,6 +186,22 @@ const AccountPage: FC = () => {
                           </div>
                         </div>
                       </>
+                    ) : !editing && game1 && game2 && game3 ? (
+                      <>
+                        <div className="flex flex-col text-sm">
+                          <div className="flex flex-col space-y-0.5 p-1 md:space-y-1.5 md:pl-4">
+                            <ol className="list-decimal ">
+                              {[game1, game2, game3].map(
+                                (name: string, idx: number) => (
+                                  <li className="list-item" key={idx}>
+                                    {name}
+                                  </li>
+                                ),
+                              )}
+                            </ol>
+                          </div>
+                        </div>
+                      </>
                     ) : (
                       <>
                         <div className="flex flex-col">
@@ -220,7 +236,11 @@ const AccountPage: FC = () => {
                     )}
                   </div>
 
-                  <div onClick={() => setEditing(!editing)}>
+                  <div
+                    onClick={(e) => {
+                      console.log(e);
+                    }}
+                  >
                     <button
                       type={'button'}
                       onClick={() => {
