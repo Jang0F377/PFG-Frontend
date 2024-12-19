@@ -10,10 +10,11 @@ import {
   ROUTES_STATE_MESSAGE,
 } from '../../constants/routes';
 import CustomAvatar from '../common/Avatar';
+import { clearSessionStorage, clearLocalStorage } from '../../utils/storage';
+import { User } from '../../types/user';
 
-const DashboardHeader = () => {
-  const authObject = sessionStorage.getItem('pfg-auth');
-  const email = authObject ? JSON.parse(authObject).email : undefined;
+const DashboardHeader = ({ me }: { me: User }) => {
+  const email = me?.email;
   const navigate = useNavigate();
   const navigation = [
     ['Dashboard', '/dashboard'],
@@ -24,7 +25,8 @@ const DashboardHeader = () => {
   ];
 
   const handleSignOut = async () => {
-    sessionStorage.clear();
+    clearSessionStorage();
+    clearLocalStorage();
     navigate(INTERNAL_ROUTES.LOGIN_PAGE, {
       replace: true,
       state: {

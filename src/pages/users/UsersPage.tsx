@@ -1,20 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Container } from '../../components/common/Container';
 import UserListItem from '../../components/users/UsersListItem';
 import { User } from '../../types/user';
-import { BACKEND_ROUTES } from '../../constants/routes';
+import { BACKEND_ROUTES, INTERNAL_ROUTES } from '../../constants/routes';
 import { ErrorPage } from '../error/Error';
 import LoadingPage from '../loading/LoadingPage';
+import useAsyncEffect from 'use-async-effect';
+import { useOutletContext, useNavigate } from 'react-router-dom';
 
 const UsersPage = () => {
+  const navigate = useNavigate();
   const [globalUsers, setGlobalUsers] = useState<User[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { me, token, isLoading } = useOutletContext<{
+    me: User;
+    token: string;
+    isLoading: boolean;
+  }>();
+  const [loading, setLoading] = useState<boolean>(isLoading ? isLoading : true);
   const [error, setError] = useState(false);
-  const [sessionObject] = useState(
-    sessionStorage.getItem('pfg-auth') || undefined,
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(
+    undefined,
   );
+  const [errorStatusCode, setErrorStatusCode] = useState<number | undefined>(
+    undefined,
+  );
+
   const [userEmail, setUserEmail] = useState<string | undefined>(undefined);
-  const [authToken, setAuthToken] = useState<string | undefined>(undefined);
 
   const fetchUsers = async () => {
     const response = await fetch(BACKEND_ROUTES.USER_BASE_URL, {
@@ -29,31 +40,33 @@ const UsersPage = () => {
     const responseBody = await response.json();
 
     setGlobalUsers(responseBody?.data);
-    setIsLoading(false);
   };
 
-  useEffect(() => {
-    if (sessionObject) {
-      const parsedObj = JSON.parse(sessionObject);
-      const email = parsedObj?.email;
-      const token = parsedObj?.token;
-      setUserEmail(email);
-      setAuthToken(token);
+  useAsyncEffect(async (isMounted) => {
+    if (!isMounted()) return;
+    if (!me || !token) {
+      setError(true);
+      setErrorMessage('You are not logged in');
+      setLoading(false);
+      navigate(INTERNAL_ROUTES.LOGIN_PAGE);
     }
-    fetchUsers();
+    setUserEmail(me?.email);
+    await fetchUsers();
+    setLoading(false);
     return () => {};
   }, []);
 
-  if (isLoading) {
+  if (loading) {
     return <LoadingPage />;
   }
 
   if (error) {
-    return <ErrorPage />;
+    return <ErrorPage message={errorMessage} />;
   }
 
   return (
-    true && (
+    me &&
+    globalUsers.length && (
       <>
         <div className="min-h-screen bg-neon-blue-50">
           <header className="border-y border-neon-blue-700 py-1 md:border-y-0 md:border-t">
@@ -69,7 +82,7 @@ const UsersPage = () => {
                 <UserListItem
                   key={user.email}
                   user={user}
-                  authToken={authToken}
+                  authToken={token}
                   userEmail={userEmail}
                 />
               ))}

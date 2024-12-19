@@ -121,7 +121,6 @@ const IncomingSeshInviteItems = ({
   useAsyncEffect(async (isMounted) => {
     if (!isMounted()) return;
     const seshInfo: Sesh = await fetchSeshInfo();
-    console.log('seshInfo', seshInfo);
     setSendersDetails(seshInfo?.sender);
     delete seshInfo?.sender;
     setSeshInfo(seshInfo);

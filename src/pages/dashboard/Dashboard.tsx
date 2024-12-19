@@ -4,10 +4,10 @@ import {
   InviteEmptyState,
 } from '../../components/common/EmptyState';
 import { User } from '../../types/user';
-import { BACKEND_ROUTES, INTERNAL_ROUTES } from '../../constants/routes';
+import { INTERNAL_ROUTES } from '../../constants/routes';
 import LoadingPage from '../loading/LoadingPage';
 import { ErrorPage } from '../error/Error';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import Friends from '../../components/dashboard/Friends';
 import useAsyncEffect from 'use-async-effect';
 import IncomingSeshInviteItems from '../../components/dashboard/IncomingSeshInviteItem';
@@ -18,10 +18,12 @@ import { SeshSendInviteModal } from '../../components/common/Modals';
 
 const DashboardPage: FC = () => {
   const navigate = useNavigate();
-  const authObject = sessionStorage.getItem('pfg-auth');
-  const token = authObject ? JSON.parse(authObject).token : undefined;
-  const [me, setMe] = useState<User | undefined>(undefined);
-  const [isLoading, setIsLoading] = useState(true);
+  const { me, token, isLoading } = useOutletContext<{
+    me: User;
+    token: string;
+    isLoading: boolean;
+  }>();
+  const [loading, setLoading] = useState<boolean>(isLoading ? isLoading : true);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | undefined>(
     undefined,
@@ -47,44 +49,21 @@ const DashboardPage: FC = () => {
     setShowModal(false);
   };
 
-  const fetchMe = async (): Promise<User> => {
-    const response = await fetch(BACKEND_ROUTES.GET_ME_URL, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    const responseBody = await response.json();
-
-    if (!response.ok) {
-      if (response.status === 404) {
-        sessionStorage.clear();
-        setIsLoading(false);
-        navigate(INTERNAL_ROUTES.LOGIN_PAGE);
-      }
-      setErrorStatusCode(responseBody?.statusCode);
-      setErrorMessage(responseBody?.message);
-      setIsLoading(false);
-      setError(true);
-    }
-
-    setIsLoading(false);
-    return responseBody?.data;
-  };
-
   useAsyncEffect(async (isMounted) => {
-    const userObject = await fetchMe();
     if (!isMounted()) return;
-    console.log(userObject);
-    setMe(userObject);
-    setIncomingSeshInvites(userObject?.sesh_invites);
-    setUpcomingCreatedSeshes(userObject?.upcoming_created_seshes);
-    setUpcomingAcceptedSeshes(userObject?.upcoming_accepted_seshes);
+    if (!me || !token) {
+      setError(true);
+      setErrorMessage('You are not logged in');
+      setLoading(false);
+      navigate(INTERNAL_ROUTES.LOGIN_PAGE);
+    }
+    setIncomingSeshInvites(me?.sesh_invites);
+    setUpcomingCreatedSeshes(me?.upcoming_created_seshes);
+    setUpcomingAcceptedSeshes(me?.upcoming_accepted_seshes);
+    setLoading(false);
   }, []);
 
-  if (isLoading) {
+  if (loading) {
     return <LoadingPage />;
   }
 

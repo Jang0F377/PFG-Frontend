@@ -1,6 +1,10 @@
 import { FC, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { BACKEND_ROUTES, INTERNAL_ROUTES } from '../../constants/routes';
+import {
+  setLocalStorageItem,
+  setSessionStorageItem,
+} from '../../utils/storage';
 
 const LoginPage: FC = () => {
   const navigate = useNavigate();
@@ -37,19 +41,14 @@ const LoginPage: FC = () => {
     responseBody = await response.json();
     if (!response.ok) {
       // If error parse the json error response
-      console.log(responseBody);
-      setErrorMessage(responseBody.message);
+      setErrorMessage(responseBody?.data?.message);
       setError(true);
       return;
     }
     // Else will be token of type string
-
-    const sessionStorageToken = JSON.stringify({
-      authenticated: true,
-      email,
-      token: responseBody?.data?.access_token,
-    });
-    sessionStorage.setItem('pfg-auth', sessionStorageToken);
+    const { access_token, refresh_token } = responseBody?.data;
+    setSessionStorageItem('pfg-token', access_token);
+    setLocalStorageItem('pfg-refresh-token', refresh_token);
     navigate(INTERNAL_ROUTES.DASHBOARD);
   };
 
