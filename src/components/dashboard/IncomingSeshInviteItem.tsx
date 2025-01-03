@@ -9,6 +9,7 @@ import useAsyncEffect from 'use-async-effect';
 import { User } from '../../types/user';
 import { HandThumbUpIcon, UserIcon } from '@heroicons/react/24/outline';
 import { HandThumbDownIcon } from '@heroicons/react/24/outline';
+import { convertMilitaryToStandard } from '../../utils/timeUtils';
 
 import CustomAvatar from '../common/Avatar';
 
@@ -167,7 +168,7 @@ const IncomingSeshInviteItems = ({
               </h1>
               <AtSymbolIcon className="flex w-6  fill-neon-blue-600 " />
               <h2 className=" text-lg font-medium tracking-wide text-neon-blue-900">
-                {seshInfo?.proposed_time}
+                {convertMilitaryToStandard(seshInfo?.proposed_time)}
               </h2>
             </div>
             {givenAnswer === 'pending' ? (

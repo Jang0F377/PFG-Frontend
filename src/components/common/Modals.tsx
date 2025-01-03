@@ -10,6 +10,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
 } from '@heroicons/react/20/solid';
+import { convertToMilitaryTime } from '../../utils/timeUtils';
 import clsx from 'clsx';
 import { BACKEND_ROUTES } from '../../constants/routes';
 import Spinner from './Spinner';
@@ -158,7 +159,8 @@ export const SeshSendInviteModal = ({
 
   // Api call to handle sesh creation
   const handleCreateSesh = async () => {
-    let dateToUse: string; /**
+    let dateToUse: string;
+    /**
      * Local validation
      */
     if (day === 'today') {
@@ -179,7 +181,8 @@ export const SeshSendInviteModal = ({
         .replaceAll('/', '-');
     } else {
       var dateRegEx = /^\d{1,2}[-]\d{1,2}[-]\d{2,4}$/;
-      const properDate = day.match(dateRegEx);
+      // const properDate = day.match(dateRegEx);
+      const properDate = day.replaceAll('/', '-');
       const year = day.split('-')[2];
       dateToUse = day;
       if (!properDate) {
@@ -188,9 +191,9 @@ export const SeshSendInviteModal = ({
         );
         setDateError(true);
         return;
-      } else if (year !== '2024' && year !== '24') {
+      } else if (year !== '2025' && year !== '25') {
         setErrorMessage(
-          "For the time being the year must end as either '20' or '2024'",
+          "For the time being the year must end as either '25' or '2025'",
         );
         setDateError(true);
         return;
@@ -202,9 +205,10 @@ export const SeshSendInviteModal = ({
     setShowSpinner(true);
     // prepare the body
     const time = `${hour}:${selected} ${morningOrEvening}`;
+    const proposedTime = convertToMilitaryTime(time);
     const body = JSON.stringify({
       game,
-      proposed_time: time,
+      proposed_time: proposedTime,
       proposed_date: dateToUse,
       recipients: recipientsIds,
     });

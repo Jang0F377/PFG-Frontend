@@ -11,6 +11,7 @@ import useAsyncEffect from 'use-async-effect';
 import LoadingPage from '../../pages/loading/LoadingPage';
 import { User } from '../../types/user';
 import CustomAvatar from '../common/Avatar';
+import { convertMilitaryToStandard } from '../../utils/timeUtils';
 
 interface UpcomingCreatedSeshItemProps {
   sesh: Sesh;
@@ -66,7 +67,7 @@ const UpcomingCreatedSeshItem = ({
               </h1>
               <AtSymbolIcon className="flex w-6  fill-neon-blue-600 " />
               <h2 className=" text-lg font-medium tracking-wide text-neon-blue-900">
-                {seshInfo?.proposed_time}
+                {convertMilitaryToStandard(seshInfo?.proposed_time)}
               </h2>
             </div>
           </div>

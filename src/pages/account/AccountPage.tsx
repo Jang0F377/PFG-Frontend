@@ -18,6 +18,7 @@ const AccountPage: FC = () => {
   const [game1, setGame1] = useState('');
   const [game2, setGame2] = useState('');
   const [game3, setGame3] = useState('');
+  const [gamesUpdated, setGamesUpdated] = useState(false);
   const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState<boolean>(isLoading ? isLoading : true);
   const [error, setError] = useState(false);
@@ -143,7 +144,7 @@ const AccountPage: FC = () => {
                       Top 3
                     </label>
                     <div className="flex flex-col justify-between">
-                      {!editing && game1 && game2 && game3 ? (
+                      {!editing && gamesUpdated ? (
                         <>
                           <div className="flex flex-col text-sm">
                             <div className="flex flex-col space-y-0.5 p-1 md:space-y-1.5 md:pl-4">
@@ -217,6 +218,9 @@ const AccountPage: FC = () => {
                       <button
                         type={'button'}
                         onClick={() => {
+                          if (game1 || game2 || game3) {
+                            setGamesUpdated(true);
+                          }
                           setEditing(!editing);
                         }}
                         className="my-0.5 inline-block rounded-lg bg-neon-blue-600 px-4 py-1.5 font-medium text-neon-blue-50 hover:bg-neon-blue-800 disabled:bg-gray-400 md:py-2.5"
